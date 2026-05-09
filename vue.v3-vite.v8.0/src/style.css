@@ -1,0 +1,74 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.navbar-toggler {
+  background-color: lightblue;
+}
+
+.user {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+}
+
+.logo {
+  width: 100px;
+  height: 40px;
+}
+.usr {
+  border-radius: 20px;
+}
+
+#offcanvasMenu {
+  width: 40% !important;
+}
+
+.tot-rec {
+  margin-left: 10px !important;
+}
+.modal-xls {
+  width: 300vw !important;
+}
+
+.justify {
+  text-align: justify;
+}
+
+/* $page-bg: #8c8c8c;
+$text-color: #5d5d5d; */
+
+.embossed-text {
+text-shadow: 
+-1px -1px 1px #09521a, /* Lighter shade for highlight */
+3px 1px 1px #695b5b;   /* Darker shade for shadow */
+}
+
+.bg-violet {
+  background-color: rgb(91, 14, 91);
+}
+
+.btn-violet {
+  background-color: rgb(91, 14, 91);
+}
+.btn-violet:hover {
+  background-color: rgb(103, 50, 103);  
+}
+
+.border-violet {
+  border-color: rgb(91, 14, 91);
+}
+
+.left-10 {
+  margin-left: 27px !important;
+}
