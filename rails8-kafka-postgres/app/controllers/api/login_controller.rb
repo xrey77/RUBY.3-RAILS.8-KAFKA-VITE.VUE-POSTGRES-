@@ -14,7 +14,6 @@ class Api::LoginController < ActionController::API
               token = JsonWebToken.encode(payload)
               role_name = @user.role&.name 
               
-                
               handle = KAFKA_PRODUCER.produce(
                 topic:   "central_events",
                 payload: { user_id: @user.id, action: "login" }.to_json,

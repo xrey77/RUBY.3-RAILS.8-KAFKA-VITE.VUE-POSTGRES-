@@ -6,6 +6,15 @@ class Api::RegisterController < ActionController::API
             @user = User.new(register_params)
             @user.role_id = 3
             if @user.save            
+
+                handle = KAFKA_PRODUCER.produce(
+                    topic:   "central_events",
+                    payload: { user_id: @user.id, action: "register" }.to_json,
+                    key:     "user-registration"
+                )
+                handle.wait 
+    
+
                 render json: { 
                     message: 'You have successfully registered, please login now.'
                 }, status: :created      

@@ -9,19 +9,27 @@ class Api::ProductController < ActionController::API
         tot1 = (totrecs.to_f / perpage)
         totalpage = tot1.ceil
 
-        # @products = Product.limit(perpage).offset(offset)
         @products = Product.includes(:category).limit(perpage).offset(offset)        
         if @products.size > 0
             found = true
         end
 
         if found
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { 
+                    total_prods: totrecs,                
+                    action: "prodlist" }.to_json,
+                key:     "user-prodlist"
+            )
+            handle.wait 
+    
             render json: {
                 page: page,
                 totpage: totalpage,
                 totalrecords: totrecs,
                 products: @products.as_json(include: { category: { only: :name } }) 
-                # products: @products,
 
             }, status: :ok
         else   
@@ -52,6 +60,17 @@ class Api::ProductController < ActionController::API
         end
 
         if found
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { 
+                    total_products: totrecs,
+                    action: "prodsearch" }.to_json,
+                key:     "user-prodsearch"
+            )
+            handle.wait 
+    
+
             render json: {
                 page: page,
                 totpage: totalpage,
@@ -67,8 +86,49 @@ class Api::ProductController < ActionController::API
     end
 
     def getSales
-        @sales = Sale.select(:id, :salesamount, :salesdate)         
+        @sales = Sale.select(:id, :salesamount, :salesdate)       
+        
+        total_sales_count = Sale.count 
+
+        handle = KAFKA_PRODUCER.produce(
+            topic:   "central_events",
+            payload: { 
+                total_sales: total_sales_count,                
+                action: "salesdata" }.to_json,
+            key:     "user-salesdata"
+        )
+        handle.wait 
+    
         render json: @sales.as_json(only: [:salesamount, :salesdate]), status: :ok
     end
 
+
+    def productCategory
+        products = Product.joins(:category)
+                          .select('products.id, products.descriptions, products.qty, products.unit, 
+                                   products.costprice, products.sellprice, 
+                                   categories.name as category_name')
+      
+        grouped = products.group_by(&:category_name).map do |name, details|
+          {
+            category: name,
+            products: details.map { |p| p.attributes.except('category_name') }
+          }
+        end
+
+        products_count = Product.count
+
+        handle = KAFKA_PRODUCER.produce(
+            topic:   "central_events",
+            payload: { 
+                products_count:  products_count,
+                action: "categoryproducts" }.to_json,
+            key:     "user-categoryproducts"
+        )
+        handle.wait 
+        
+
+        render json: grouped, status: :ok
+      end
+      
 end

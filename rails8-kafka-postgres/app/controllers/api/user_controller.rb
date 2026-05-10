@@ -12,6 +12,14 @@ class Api::UserController < ApplicationController
 
             role_name = @user.role&.name 
 
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { user_id: @user.id, action: "getuserid" }.to_json,
+                key:     "user-getid"
+            )
+            handle.wait 
+
+
             render json: { 
                 id: @user.id,
                 firstname: @user.firstname,
@@ -45,10 +53,17 @@ class Api::UserController < ApplicationController
         @users = User.limit(perpage).offset(offset)
         if @users.size > 0
             found = true
-            # puts "No records found................."
         end
 
         if found
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { user_id: totrecs, action: "getusers" }.to_json,
+                key:     "user-getusers"
+            )
+            handle.wait 
+
             render json: {
                 page: page,
                 totpage: totalpage,
@@ -73,6 +88,14 @@ class Api::UserController < ApplicationController
             @user.lastname = jdata["lastname"]
             @user.mobile = jdata["mobile"]
             @user.save
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { user_id: @user.id, action: "profileupdate" }.to_json,
+                key:     "user-profileupdate"
+            )
+            handle.wait 
+
             render json: {
                 message: 'Your profile has been updated successfully.'
                 }, status: :ok                   
@@ -94,6 +117,15 @@ class Api::UserController < ApplicationController
             hash = BCrypt::Password.create(pwd)            
             @user.password_digest = hash
             @user.save
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { user_id: @user.id, action: "changepassword" }.to_json,
+                key:     "user-changepassword"
+            )
+            handle.wait 
+
+
             render json: { 
                 message: 'Your password has been changed successfully.'
                 }, status: :ok                   
@@ -138,6 +170,13 @@ class Api::UserController < ApplicationController
             File.open(destination_path, 'wb') do |file|
               file.write(uploaded_file.read)
             end
+
+            handle = KAFKA_PRODUCER.produce(
+                topic:   "central_events",
+                payload: { user_id: @user.id, action: "uploadpicture" }.to_json,
+                key:     "user-uploadpicture"
+            )
+            handle.wait 
 
             render json: { 
                 message: 'Your Profile Picture has been changed successfully.'

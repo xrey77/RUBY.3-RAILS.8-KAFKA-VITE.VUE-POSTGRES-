@@ -6,4 +6,4 @@ KAFKA_PRODUCER = Rdkafka::Config.new({
 }).producer
 
 # To ensure the producer flushes pending messages on shutdown
-at_exit { KAFKA_PRODUCER.close }
+# at_exit { KAFKA_PRODUCER.close }

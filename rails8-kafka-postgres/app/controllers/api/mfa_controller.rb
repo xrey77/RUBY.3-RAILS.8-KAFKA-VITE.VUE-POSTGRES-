@@ -37,7 +37,13 @@ class Api::MfaController < ActionController::API
                 @user.qrcodeurl = @base64Qrcode.to_s
                 @user.save
 
-
+                handle = KAFKA_PRODUCER.produce(
+                    topic:   "central_events",
+                    payload: { user_id: @user.id, action: "activatemfa" }.to_json,
+                    key:     "user-activatemfa"
+                )
+                handle.wait 
+    
                 render json: { 
                     qrcodeurl: @base64Qrcode,
                     message: 'Multi-Factor Authenticator has been enabled.'
@@ -68,6 +74,14 @@ class Api::MfaController < ActionController::API
             @username = @user.username
             totp = ROTP::TOTP.new(@user.secret, issuer: "SUPERCAR INC.")
             if totp.verify(otp, drift_behind: 15)
+
+                handle = KAFKA_PRODUCER.produce(
+                    topic:   "central_events",
+                    payload: { user_id: @user.id, action: "verifyotp" }.to_json,
+                    key:     "user-verifyotp"
+                )
+                handle.wait 
+    
                 render json: { 
                     username: @username,
                     message: 'OTP code has been verified successfully.'

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
 
     post "/signup", to: "register#userRegistration"
-    post "/signin", to: "login#userLogin"
+    post "/signin", to: "login#userLogin", as: :login
 
     get "/getuserid/:id", to: "user#getUser"
     get "/getallusers/:page", to: "user#getAllusers"
@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get "/products/list/:page", to: "product#productsList"
     get "/products/search/:page/:keyword", to: "product#productsSearch"
     get "/salesdata", to: "product#getSales"
-
+    get "/productsbycategory", to: "product#productCategory"
     # Defines the root path route ("/")
     root "static#index"
 
