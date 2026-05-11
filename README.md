@@ -1,4 +1,5 @@
-<h3>Ruby 3.3.6 / Rails 8.1.3, Apache Kafka, Rspec Test Framework, Vite v7.2.2 + Vue v3.5.24 and PostgreSql Start-up Project</h3>
+<h3>Ruby 3.3.6 / Rails 8.1.3, Apache Kafka, RSpec-Request Spec Test, 
+Vite v8.0.0 + Vue v3.5.24 and PostgreSql Start-up Project</h3>
 
 <p>Dependencies</p>
 <p>1. Node 23.5.0</p>

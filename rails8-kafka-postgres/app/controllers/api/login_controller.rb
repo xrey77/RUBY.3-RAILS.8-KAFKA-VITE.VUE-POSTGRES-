@@ -11,7 +11,9 @@ class Api::LoginController < ActionController::API
               exp = 8.hours.from_now
               @user_id = @user.id
               payload = { data: @user_id, exp: exp.to_i }
-              token = JsonWebToken.encode(payload)
+              secret = Rails.application.credentials.secret_key_base
+              token = JWT.encode(payload, secret, 'HS256')
+
               role_name = @user.role&.name 
               
               handle = KAFKA_PRODUCER.produce(

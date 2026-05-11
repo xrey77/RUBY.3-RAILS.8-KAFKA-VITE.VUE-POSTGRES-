@@ -4,6 +4,8 @@ require('base64')
 
 class Api::UserController < ApplicationController
     
+    # rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
+
     def getUser
         idno = params[:id]
         
@@ -78,11 +80,11 @@ class Api::UserController < ApplicationController
         end
     end
     
-    def updateProfile
+    def profileUpdate
         idno = params[:id]        
         json_body = request.body.read
         jdata = JSON.parse(json_body)
-        @user = User.find_by(id: idno.to_i)
+        @user = User.find_by(id: idno)
         if @user.present?
             @user.firstname = jdata["firstname"]
             @user.lastname = jdata["lastname"]
@@ -100,9 +102,7 @@ class Api::UserController < ApplicationController
                 message: 'Your profile has been updated successfully.'
                 }, status: :ok                   
         else
-            render json: { 
-                message: 'User ID does not exists.'
-                }, status: :unprocessable_entity                   
+            render json: { message: 'User ID does not exists.' }, status: :not_found
         end
     end
 
@@ -112,7 +112,7 @@ class Api::UserController < ApplicationController
         jdata = JSON.parse(json_body)
         pwd = jdata["password"]
 
-        @user = User.find_by(id: idno.to_i)
+        @user = User.find_by(id: idno)
         if @user.present?
             hash = BCrypt::Password.create(pwd)            
             @user.password_digest = hash
@@ -133,7 +133,7 @@ class Api::UserController < ApplicationController
         else
             render json: { 
                 message: 'User ID does not exists.'
-                }, status: :unprocessable_entity                   
+                }, status: :not_found                   
     
         end
     end 
@@ -198,8 +198,11 @@ class Api::UserController < ApplicationController
 
     def authenticate_user
       header = request.headers['Authorization']
-      token = header&.split(' ')&.last 
-      decoded_payload = JsonWebToken.decode(token)
+    #   token = header&.split(' ')&.last 
+      token = header.is_a?(String) ? header.split(' ').last : nil
+
+    #   decoded_payload = JsonWebToken.decode(token)
+      decoded_payload = JsonWebToken.decode(token) if token      
       if decoded_payload
         idno = decoded_payload['data']
         @current_user = User.find_by(id: idno.to_i)
@@ -208,5 +211,10 @@ class Api::UserController < ApplicationController
       render json: { message: 'Unauthorized Access' }, status: :unauthorized unless @current_user
     end
 
+    # private
+
+    # def user_not_found
+    #   render json: { message: 'User ID does not exists.' }, status: :not_found
+    # end    
 
 end

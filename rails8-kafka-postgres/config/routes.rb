@@ -1,15 +1,17 @@
 Rails.application.routes.draw do
   get "static/index"
   
+  root "static#index"
   # get "up" => "rails/health#show", as: :rails_health_check
-  namespace :api do
+  # namespace :api do
+  namespace :api, defaults: { format: :json } do
 
     post "/signup", to: "register#userRegistration"
     post "/signin", to: "login#userLogin", as: :login
 
     get "/getuserid/:id", to: "user#getUser"
     get "/getallusers/:page", to: "user#getAllusers"
-    patch "/updateprofile/:id", to: "user#updateProfile"
+    patch "/updateprofile/:id", to: "user#profileUpdate"
     patch "/changepassword/:id", to: "user#changePassword"
     patch "/uploadpicture/:id", to: "user#changeProfilepic"
 
