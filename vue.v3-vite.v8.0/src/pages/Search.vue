@@ -16,7 +16,7 @@
         <div class="card-group">
             <div v-for="prod in prodsearch" :key="prod['id']" class="col-md-4">
                 <div class="card mx-3 mt-2">
-                    <img v-bind:src="prod['productpicture']" class="card-img" alt=""/>
+                    <img v-bind:src="`http://127.0.0.1:3000/products/${prod['productpicture']}`" class="card-img" alt=""/>
                     <div class="card-body cardbody-height">
                         <h5 class="card-title">Description</h5>
                         <p class="card-text">{{ prod['descriptions'] }}</p>

@@ -3,7 +3,7 @@
     <div class="card bg-dark">
       <div class="card-body">
         <div class="card-text">
-          <img class="contact" src="http://127.0.0.1:3000/images/3.jpeg" alt=""/>
+          <img class="contact" src="/images/3.jpeg" alt=""/>
           <h3 class="card-text text-warning">Contact Us</h3>
           <p class="card-text text-white">
             Supercars welcomes all enquiries, comments, feedback or suggestions regarding the championship, ticketing, digital, media, corporate sales etc.

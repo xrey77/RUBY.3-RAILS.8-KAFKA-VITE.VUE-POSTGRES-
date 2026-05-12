@@ -6,25 +6,33 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "@types/axios": "^0.9.36",
     "@types/bootstrap": "^5.2.10",
-    "@types/jquery": "^3.5.33",
-    "axios": "^1.13.2",
+    "@types/jquery": "^4.0.0",
+    "axios": "^1.16.0",
     "bootstrap": "^5.3.8",
-    "jquery": "^3.7.1",
+    "jquery": "^4.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.12",
     "vue": "^3.5.34",
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.8.1",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.0",
+    "jsdom": "^27.0.1",
+    "sass": "^1.99.0",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.1.3"
+  },
+  "overrides": {
+    "esbuild": "npm:esbuild-wasm@latest"
   }
 }

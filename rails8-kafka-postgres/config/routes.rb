@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get "static/index"
   
-  root "static#index"
+  # root "static#index"
   # get "up" => "rails/health#show", as: :rails_health_check
   # namespace :api do
   namespace :api, defaults: { format: :json } do

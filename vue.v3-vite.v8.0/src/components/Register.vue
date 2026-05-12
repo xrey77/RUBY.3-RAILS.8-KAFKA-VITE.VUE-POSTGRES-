@@ -98,7 +98,7 @@
               submitRegistration: function() {
                 const data =JSON.stringify({ 
                     firstname: this.firstname, lastname: this.lastname, 
-                  email: this.email, mobile: this.mobile,
+                  email_address: this.email, mobile: this.mobile,
                   username: this.username, password: this.password });
                 api.post("api/signup", data)
                 .then((res: any) => {

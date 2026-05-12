@@ -8,19 +8,19 @@
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="http://127.0.0.1:3000/images/1.jpeg" class="d-block w-100" alt="...">
+        <img src="/images/1.jpeg" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
           <h1 class="mb-5 embossed-text">Sports car with race track-like power</h1>
         </div>
       </div>
       <div class="carousel-item">
-        <img src="http://127.0.0.1:3000/images/2.jpeg" class="d-block w-100" alt="...">
+        <img src="/images/2.jpeg" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
           <h1 class="mb-5 embossed-text">More powerful than typical sports cars</h1>
         </div>
       </div>
       <div class="carousel-item">
-        <img src="http://127.0.0.1:3000/images/3.jpeg" class="d-block w-100" alt="...">
+        <img src="/images/3.jpeg" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
           <h1 class="mb-5 embossed-text"> Super fast, luxurious and prestigious</h1>
         </div>

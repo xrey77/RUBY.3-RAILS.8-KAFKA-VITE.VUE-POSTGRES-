@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col">
                     <div class="mb-3">
-                        <input type="text" required v-model="firstname" name="firstname" class="form-control"  autocomplete="off">
+                        <input type="text" required v-model="firstname" id="firstname" name="firstname" class="form-control"  autocomplete="off">
                     </div>
                     <div class="mb-3">
                         <input type="text" required v-model="lastname" name="lastname" class="form-control" autocomplete="off">
@@ -153,11 +153,9 @@
     import { defineComponent} from 'vue'
     import Footer from '../components/Footer.vue';
     import jQuery from 'jquery';
-    import axios from 'axios';
-    
-    // const selectedFile = ref<File | null>(null);
-    
-    const api = axios.create({
+    import Axios from 'axios';
+        
+    const api = Axios.create({
         baseURL: "http://127.0.0.1:3000",
         headers: {'Accept': 'application/json',
                   'Content-Type': 'application/json'}
@@ -200,18 +198,19 @@
         },
         methods: {
             getUserprofile: async function() {
-              await api.get(`api/getuserid/${this.userid}`, { headers: {
-                Authorization: `Bearer ${this.token}`
-            }} )
-                .then((res: any) => {
+              await api.get(`api/getuserid/${this.userid}`, { 
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                }).then((res: any) => {
                         this.profileMsg = res.data.message;
                         this.firstname = res.data.firstname;
                         this.lastname = res.data.lastname;
-                        this.email = res.data.email;
+                        this.email = res.data.email_address;
                         this.mobile = res.data.mobile;
-                        this.profilepic = res.data.userpic;
+                        this.profilepic = `http://127.0.0.1:3000/users/${res.data.userpic}`;
                         if (res.data.qrcodeurl == null) {
-                            this.qrcodeurl = 'http://127.0.0.1:3000/images/qrcode.png';
+                            this.qrcodeurl = '/images/qrcode.png';
                         } else {
                             let qrcode: any = 'data:image/png;base64,'+res.data.qrcodeurl;
                             this.qrcodeurl = qrcode;
@@ -303,33 +302,33 @@
             },
             changePicture: function(event: any) {
                 event.preventDefault();            
-                    jQuery("#userpic").attr('src',URL.createObjectURL(event.target.files[0]));
-                    const formdata = new FormData();
-                    formdata.append('userpic', event.target.files[0]);
-    
-                    api.patch(`api/uploadpicture/${this.userid}`, formdata, { headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${this.token}`
-                    }} )
-                    .then((res: any) => {
-                        this.profileMsg = res.data.message;
-                        setTimeout(() => {
-                            sessionStorage.setItem('USERPIC',res.data.userpic);
+                jQuery("#userpic").attr('src',URL.createObjectURL(event.target.files[0]));
+                const formdata = new FormData();
+                formdata.append('userpic', event.target.files[0]);
+
+                api.patch(`api/uploadpicture/${this.userid}`, formdata, { headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${this.token}`
+                }} )
+                .then((res: any) => {
+                    this.profileMsg = res.data.message;
+                    setTimeout(() => {
+                        sessionStorage.setItem('USERPIC',res.data.userpic);
+                        this.profileMsg = '';
+                        this.profilepic = res.data.userpic;
+                        location.reload();
+                    }, 3000);
+                }, (error: any) => {
+                    if (error.response) {
+                        this.profileMsg = error.response.data.message;
+                    } else {
+                        this.profileMsg = error.message;
+                    }
+                    window.setTimeout(() => {
                             this.profileMsg = '';
-                            this.profilepic = res.data.userpic;
-                            location.reload();
                         }, 3000);
-                    }, (error: any) => {
-                        if (error.response) {
-                            this.profileMsg = error.response.data.message;
-                        } else {
-                            this.profileMsg = error.message;
-                        }
-                        window.setTimeout(() => {
-                                this.profileMsg = '';
-                            }, 3000);
-                            return;
-                    });    
+                        return;
+                });    
             },
             checkboxPassword: function() {
                 if (this.chgPwd) {
@@ -339,7 +338,6 @@
                     this.chgPwd = true;
                     this.chkMfa = false;
                     this.showSave = true;
-                    // $('#chkMfa').prop('checked', false);
                 } else {
                     this.password = '';
                     this.confpassword = '';
@@ -391,7 +389,7 @@
                     Authorization: `Bearer ${this.token}`
                 }} )
                 .then((res: any) => {
-                        this.qrcodeurl = 'http://127.0.0.1:3000/images/qrcode.png';
+                        this.qrcodeurl = '/images/qrcode.png';
                         this.profileMsg = res.data.message;
                         window.setTimeout(() => {
                             this.profileMsg = '';

@@ -61,7 +61,7 @@ export default defineComponent({
 
     <nav class="navbar nav-top navbar-expand-lg bg-dark">
       <div class="container-fluid">
-        <RouterLink class="navbar-brand" to="/"><img class="logo" src="http://127.0.0.1:3000/images/logo.png" alt=""/></RouterLink>
+        <RouterLink class="navbar-brand" to="/"><img class="logo" src="/images/logo.png" alt=""/></RouterLink>
         
         <a class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>

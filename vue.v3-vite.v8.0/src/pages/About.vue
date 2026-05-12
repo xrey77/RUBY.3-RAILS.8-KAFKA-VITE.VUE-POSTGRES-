@@ -2,7 +2,7 @@
   <main>
     <div class="card bg-dark mt-2">
       <div class="card-body">
-      <img class="about" src="http://127.0.0.1:3000/images/about.png" alt="" />
+      <img class="about" src="/images/about.png" alt="" />
       <div class="card-text text-white">
         <h3 class="text-warning">About Us</h3>
         Our supercar, also known as an exotic car, is a street-legal sports car with race track-like power, speed, and handling, plus a certain subjective cachet linked to pedigree and/or exclusivity. The term 'supercar' is frequently used for the extreme fringe of powerful, low-bodied mid-engine luxury sportscars. A low-profile car may have limited ground clearance, but a handling-favorable center of gravity and a smaller frontal area than a front engined car. These characteristics can reduce supercars' aerodynamic drag, enabling higher top speeds. Since the 2000s, the term hypercar has come into use for the highest-performance supercars.

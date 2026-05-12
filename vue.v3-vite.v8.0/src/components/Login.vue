@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import Axios from 'axios';
 import jQuery from 'jquery';
 import Mfa from './Mfa.vue';
 import { defineComponent } from 'vue';
 
-const api = axios.create({
+const api = Axios.create({
   baseURL: "http://127.0.0.1:3000",
   headers: {'Accept': 'application/json',
             'Content-Type': 'application/json'}
@@ -59,40 +59,40 @@ export default defineComponent({
         submitLogindata: function() {
                 this.isDisabled = true;
                 this.message = "please wait...";
-                const jsonData =JSON.stringify({ username: this.username, password: this.password });
-                api.post("api/signin", jsonData)
-                .then((res: any) => {
+                const jsonData = JSON.stringify({ username: this.username, password: this.password });
+                api.post("api/signin", jsonData).then((res: any) => {
+                    let userpic: string = `http://127.0.0.1:3000/users/${res.data.userpic}`
                     if (res.data.qrcodeurl !== null) {
                         this.message = res.data.message;
-                        window.sessionStorage.setItem('USERID',res.data.id);
-                        window.sessionStorage.setItem('TOKEN',res.data.token);
-                        window.sessionStorage.setItem('ROLE',res.data.roles);
-                        window.sessionStorage.setItem('USERPIC',res.data.userpic);
+                        sessionStorage.setItem('USERID',res.data.id);
+                        sessionStorage.setItem('TOKEN',res.data.token);
+                        sessionStorage.setItem('ROLE',res.data.roles);
+                        sessionStorage.setItem('USERPIC',userpic);
+                        this.isDisabled = false;
                         setTimeout(() => {
                             this.message = '';
-                            this.isDisabled = false;
                             jQuery("#loginReset").trigger('click');
                             jQuery("#mfa").trigger('click');                            
                         }, 5000);
                     } else {
-                        window.sessionStorage.setItem('USERID',res.data.id);
-                        window.sessionStorage.setItem('USERNAME',res.data.username);
-                        window.sessionStorage.setItem('TOKEN',res.data.token);                        
-                        window.sessionStorage.setItem('ROLE',res.data.roles);
-                        window.sessionStorage.setItem('USERPIC',res.data.userpic);
+                        sessionStorage.setItem('USERID',res.data.id);
+                        sessionStorage.setItem('USERNAME',res.data.username);
+                        sessionStorage.setItem('TOKEN',res.data.token);                        
+                        sessionStorage.setItem('ROLE',res.data.roles);
+                        sessionStorage.setItem('USERPIC',userpic);
+                        this.isDisabled = false;
                         setTimeout(() => {
                             this.message = '';
-                            this.isDisabled = false;
                             jQuery("#staticLogin").hide()
                             location.reload();                            
                         }, 3000);
                     }
                 }, (error: any) => {
-                    if (error.response) {
+                    if (error.response && error.response.data) {
                         this.message = error.response.data.message;
                     } else {
-                        this.message = error.message;
-                    }
+                        this.message = error.message || "An unexpected error occurred";
+                    }                    
                     setTimeout(() => {
                         this.message = '';
                         this.isDisabled = false;
