@@ -1,7 +1,6 @@
 import { shallowMount, mount, flushPromises } from '@vue/test-utils';
-import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Profile from '../../pages/Profile.vue';
-
 
 const { mockGet, mockPatch } = vi.hoisted(() => {
     return { 
@@ -98,7 +97,6 @@ describe('Profile.vue', () => {
 
 
     it('submits profile data and updates profileMsg on success', async () => {
-        // Now mockPatch is defined
         mockPatch.mockResolvedValueOnce({
             data: { message: 'Profile updated successfully' },
         });
@@ -222,5 +220,66 @@ describe('Profile.vue', () => {
 
         expect(wrapper.vm.profileMsg).toBe('Upload Failed');
     });    
+
+
+    // 5th TEST
+
+
+    it('enableMFA: updates qrcodeurl and sets profileMsg on success', async () => {
+        const mockResponse = {
+            data: {
+                message: 'MFA Enabled',
+                qrcodeurl: 'eyJhbGciOiJIUzI1NiJ9...'
+            }
+        };
+        mockPatch.mockResolvedValueOnce(mockResponse); 
+
+        await wrapper.vm.enableMFA();
+        await flushPromises();
+        await wrapper.vm.$nextTick(); 
+
+        expect(mockPatch).toHaveBeenCalledWith(
+            'api/mfa/activate/123',
+            JSON.stringify({ TwoFactorEnabled: true }),
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9...'
+                })
+            })
+        );
+        
+        // expect(wrapper.vm.qrcodeurl).toBe('base64data');
+        expect(wrapper.vm.profileMsg).toBe('MFA Enabled');
+    });
+    
+    it('disableMFA: resets qrcodeurl and sets profileMsg on success', async () => {
+        const mockResponse = {
+            data: {
+                message: 'MFA Disabled',
+            }
+        };
+        mockPatch.mockResolvedValue(mockResponse); 
+    
+        await wrapper.vm.disableMFA();
+        await flushPromises();
+    
+        // expect(wrapper.vm.qrcodeurl).toBe(null);
+        expect(wrapper.vm.profileMsg).toBe('MFA Disabled');
+    });
+    
+    it('handles error scenario', async () => {
+        const mockError = {
+            response: {
+                data: { message: 'MFA Error' }
+            }
+        };
+        mockPatch.mockRejectedValue(mockError); 
+    
+        await wrapper.vm.enableMFA();
+        await flushPromises();
+    
+        expect(wrapper.vm.profileMsg).toBe('MFA Error');
+    });
+
 
 });

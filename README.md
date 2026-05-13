@@ -1,9 +1,10 @@
 <h3>Ruby 3.3.6 / Rails 8.1.3, Apache Kafka, RSpec-Request Spec Test, 
-Vite v8.0.0 + Vue v3.5.24 /VTest, JSDOM and PostgreSql Start-up Project</h3>
+Vite v8.0.12 + Vue v3.5.34 /VTest, JSDOM and PostgreSql Start-up Project</h3>
 
-<p>Dependencies</p>
+<p>Vue Dependencies</p>
 <p>1. Node 23.5.0</p>
 <p>2. Npm 11.1.</p>
+<p>3. Vitest, jsdom</p>
 
 <p>Requirements: </p>
 <p>1. Postgres Management</p>
@@ -18,7 +19,7 @@ Vite v8.0.0 + Vue v3.5.24 /VTest, JSDOM and PostgreSql Start-up Project</h3>
 This will require your Google/Microsoft Authenticator</p>
 <p>4. Upload User's Profile Picture </p>
 <p>5. Products Listings, Catalogs pagination and Product Search</p>
-<p>6. Vtest, JSDOM, Cmmponent and Behavior Test
+<p>6. Vtest, JSDOM, Component and Behavior Test
 
 
 # README

@@ -3,7 +3,8 @@
             <div class="card-header text-warning rounded hdr">
                 Product Catalogs
             </div>        
-            <div v-if="totpage ===0" class=" text-center text-danger">Products is empty....</div>
+            <div v-if="errorMessage" class="error text-white">{{ errorMessage }}</div>            
+            <div v-if="totpage === 0" class=" text-center text-danger">Products is empty....</div>
             <div v-else-if="totpage >1" class="text-danger">{{message}}</div>
 
             <div class="container-fluid">
@@ -25,17 +26,17 @@
             </div>    
             </div>
 
-            @if (totpage > 1) {
-            <nav aria-label="Page navigation example">
-              <ul class="pagination mt-2 mb-5">
-                <li class="page-item"><a @click="lastPage($event)" class="page-link" href="#">Last</a></li>
-                <li class="page-item"><a @click="prevPage($event)" class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a @click="nextPage($event)" class="page-link" href="#">Next</a></li>
-                <li class="page-item"><a @click="firstPage($event)" class="page-link" href="#">First</a></li>
-                <li class="page-item page-link text-danger">Page&nbsp;{{page}} of&nbsp;{{totpage}}</li>
-              </ul>
-            </nav>
-            }
+            <div v-if="totpage > 1">    
+                <nav aria-label="Page navigation example">
+                <ul class="pagination mt-2 mb-5">
+                    <li class="page-item"><a @click="lastPage($event)" class="page-link" href="#">Last</a></li>
+                    <li class="page-item"><a @click="prevPage($event)" class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a @click="nextPage($event)" class="page-link" href="#">Next</a></li>
+                    <li class="page-item"><a @click="firstPage($event)" class="page-link" href="#">First</a></li>
+                    <li class="page-item page-link text-danger">Page&nbsp;{{page}} of&nbsp;{{totpage}}</li>
+                </ul>
+                </nav>
+            </div>
 
     </div>
 </template>
@@ -88,8 +89,10 @@ const page = ref<number>(1);
 const totpage = ref<number>(0);
 const totrecs = ref<number>(0);
 const prods = ref<any[]>([]);
+const errorMessage = ref('');
 
 const getProducts = async (pg: number) => {
+    errorMessage.value = '';
     await api.get(`api/products/list/${pg}`)
     .then((res:any) => {              
         prods.value = res.data.products;  
@@ -97,14 +100,16 @@ const getProducts = async (pg: number) => {
         totpage.value = res.data.totpage;
         totrecs.value =res.data.totalrecords;
     }, (error: any) => {
-        if (error.response) {
+            if (error.response) {
                 message.value = error.response.data.message;
-             } else {
+            } else {
                 message.value = error.message;
-             }
-             setTimeout(() => {
+            }
+            prods.value = [];
+            errorMessage.value = 'Network Error'; 
+            setTimeout(() => {
                 message.value = ''
-             }, 3000);
+            }, 3000);
             return;
     });
 }

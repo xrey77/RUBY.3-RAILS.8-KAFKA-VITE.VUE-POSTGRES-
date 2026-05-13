@@ -206,13 +206,14 @@
                         this.profileMsg = res.data.message;
                         this.firstname = res.data.firstname;
                         this.lastname = res.data.lastname;
-                        this.email = res.data.email_address;
+                        this.email = res.data.email;
                         this.mobile = res.data.mobile;
                         this.profilepic = `http://127.0.0.1:3000/users/${res.data.userpic}`;
                         if (res.data.qrcodeurl == null) {
                             this.qrcodeurl = '/images/qrcode.png';
                         } else {
-                            let qrcode: any = 'data:image/png;base64,'+res.data.qrcodeurl;
+                            // let qrcode: any = 'data:image/png;base64,'+res.data.qrcodeurl;
+                            let qrcode: string = res.data.qrcodeurl;
                             this.qrcodeurl = qrcode;
                         }
                         setTimeout(() => {
@@ -360,7 +361,7 @@
                 }
             },
             enableMFA: function() {
-                const data =JSON.stringify({TwoFactorEnabled: true });
+                const data =JSON.stringify({TwoFactorEnabled: true });                
                 api.patch(`api/mfa/activate/${this.userid}`, data, { headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.token}`
@@ -369,10 +370,10 @@
                         this.profileMsg = res.data.message;
                         window.setTimeout(() => {
                             this.profileMsg = '';
-                            let qrcode: any = 'data:image/png;base64,'+res.data.qrcodeurl;
-                            this.qrcodeurl = qrcode;
+                            // this.qrcodeurl = `data:image/png;base64,${res.data.qrcodeurl}`;
+                            this.qrcodeurl = res.data.qrcodeurl;
                         }, 2000);
-                  }, (error) => {
+                }, (error: any) => {
                     if (error.response) {
                             this.profileMsg = error.response.data.message;
                     } else {

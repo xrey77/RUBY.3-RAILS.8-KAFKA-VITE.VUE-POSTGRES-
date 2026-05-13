@@ -1,4 +1,8 @@
 {
+"compilerOptions": {
+  "target": "ES2022", // Or higher
+  "lib": ["ES2022", "dom"], // Crucial
+},  
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
