@@ -1,5 +1,5 @@
 <h3>Ruby 3.3.6 / Rails 8.1.3, Apache Kafka, RSpec-Request Spec Test, 
-Vite v8.0.12 + Vue v3.5.34 /VTest, JSDOM and PostgreSql Start-up Project</h3>
+Vite v8.0.12 + Vue v3.5.34 /VTest, JSDOM and PostgreSql Starter Project</h3>
 
 <p>Vue Dependencies</p>
 <p>1. Node 23.5.0</p>
